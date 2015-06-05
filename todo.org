@@ -1,0 +1,27 @@
+#+TITLE:NYALIP to-do list
+* Outline
+What I want to do is:
+- Read an input
+- Convert everything into lists where the first argument is the operator
+- Evaluate them in applicative order
+- Return a result.
+* Reader
+Read a file from the command line, convert it into a 
+* Special Forms
+** eq?
+Returns True, False.
+** quote
+** cons
+** car
+** cdr
+** atom?
+** define
+** lambda
+** cond
+* Normal Forms
+** +
+** -
+** *
+** /
+* REPL?
+Some day
