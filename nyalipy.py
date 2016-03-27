@@ -1,20 +1,39 @@
 # Byrne Hobart
 # [2016-03-27 Sun]
 
-def read_lisp(arg): # still buggy
-    """Takes a string, splits it into a list of atoms, lists"""
-    output = []
-    elts = arg.split()
-    if elts[0][0] != '(':
+def read_lisp(elts):
+    """parses tokens one at a time, stores in nested lists"""
+    if len(elts) == 1: # atom evaluates to itself
         return elts[0]
-    else: 
-        output.append(elts[0][1:]) 
-    for elt in elts[1:]:
-        print('Now parsing: ',elt)
-        if elt[-1] == ')':
-            return output
-        else:
-            output.append(read_lisp(elt))
+    else:
+        output = []
+        while True:
+            print('current elements:',elts)
+            print('output:',output)
+            try: # why is this necessary? shouldn't previous iteration lead to a return?
+                elt = elts.pop(0)
+            except:
+                return output
+            if elt == ')':
+                return output
+            elif elt == '(':
+                output.append(read_lisp(elts))
+            else:
+                output.append(elt)
+
+def parse_string(arg):
+    """Takes a string as input, turns into a list of tokens, sends to token-parser"""
+    elts =  [item for sublist in [split_parens(x) for x in arg.split()] for item in sublist]
+    return read_lisp(elts)
+        
+def split_parens(string):
+    """For any string beginning/ending w/a paren, returns string and paren separately"""
+    if string[0] == '(':
+        return ['(',string[1:]]
+    elif string[-1] == ')':
+        return [string[:-2], ')']
+    else:
+        return string
 
 test_string = '(+ 1 2 (- 3 4))'
 
