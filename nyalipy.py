@@ -4,7 +4,12 @@
 def read_lisp(elts):
     """parses tokens one at a time, stores in nested lists"""
     if len(elts) == 1: # atom evaluates to itself
-        return elts[0]
+        elt = elts[0]
+        try:
+            elt = int(elt)
+        except:
+            pass
+        return elt
     else:
         output = []
         while True:
@@ -12,6 +17,10 @@ def read_lisp(elts):
             print('output:',output)
             try: # why is this necessary? shouldn't previous iteration lead to a return?
                 elt = elts.pop(0)
+                try:
+                    elt = int(elt)
+                except:
+                    pass
             except:
                 return output
             if elt == ')':
@@ -39,6 +48,8 @@ test_string = '(+ 1 2 (- 3 4))'
 
 test_parsed_string = ['+',1,2,['-',3,4]]
 
+# Lisp Functions, operating on lists
+
 def l_apply(func, args):
     try:
         return funclist[func](args)
@@ -65,6 +76,10 @@ def l_mult(args):
 
 def l_div(args):
     ans = arg[0]
+
+def 
+
+# list of existing functions
 
 funclist = {'+':l_plus,
             '-':l_minus,
