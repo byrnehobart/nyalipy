@@ -13,27 +13,25 @@ def read_lisp(elts):
     else:
         output = []
         while True:
-            print('current elements:',elts)
-            print('output:',output)
-            try: # why is this necessary? shouldn't previous iteration lead to a return?
+            if elts == []:
+                return output
+            else:
                 elt = elts.pop(0)
                 try:
                     elt = int(elt)
                 except:
                     pass
-            except:
-                return output
-            if elt == ')':
-                return output
-            elif elt == '(':
-                output.append(read_lisp(elts))
-            else:
-                output.append(elt)
+                if elt == ')':
+                    return output
+                elif elt == '(':
+                    output.append(read_lisp(elts))
+                else:
+                    output.append(elt)
 
 def parse_string(arg):
     """Takes a string as input, turns into a list of tokens, sends to token-parser"""
     elts =  [item for sublist in [split_parens(x) for x in arg.split()] for item in sublist]
-    return read_lisp(elts)
+    return read_lisp(elts)[0] # so ugly. Why does it add an extra list?
         
 def split_parens(string):
     """For any string beginning/ending w/a paren, returns string and paren separately"""
