@@ -81,13 +81,27 @@ def l_cons(args):
     else:
         return [args[0]]+args[1]
 
+def l_car(args):
+    if type(args) != list:
+        print('Error:',args,'is not a list')
+    else:
+        return args[0]
+
+def l_cdr(args):
+    if type(args) != list:
+        print('Error:',args,'is not a list')
+    else:
+        return args[1:]
+
 # list of existing functions
 
 funclist = {'+':l_plus,
             '-':l_minus,
             '*':l_mult,
             '/':l_div,
-            'cons':l_cons}
+            'cons':l_cons,
+            'car':l_car,
+            'cdr':l_cdr}
 
 
 
