@@ -75,14 +75,19 @@ def l_mult(args):
 def l_div(args):
     ans = arg[0]
 
-def 
+def l_cons(args):
+    if len>args != 2 or type(args[1]) != list:
+        print('error')
+    else:
+        return [args[0]]+args[1]
 
 # list of existing functions
 
 funclist = {'+':l_plus,
             '-':l_minus,
             '*':l_mult,
-            '/':l_div}
+            '/':l_div,
+            'cons':l_cons}
 
 
 
