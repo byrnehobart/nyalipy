@@ -35,14 +35,13 @@ def parse_string(arg):
         
 def split_parens(string):
     """For any string beginning/ending w/a paren, returns string and paren separately"""
-    if string[0] == '(':
-        return ['(',string[1:]]
-    elif string[-1] == ')':
-        return [string[:-2], ')']
-    else:
-        return string
+    string = [s+'(' for s in string.split('(')]
+    string = [s+')' for s in [x.split(')') for x in string]]
+    return string
 
 test_string = '(+ 1 2 (- 3 4))'
+
+test_2 = '(cons a (car (cdr (b c d))))'
 
 test_parsed_string = ['+',1,2,['-',3,4]]
 
