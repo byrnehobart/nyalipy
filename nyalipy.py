@@ -3,6 +3,8 @@
 
 from collections import namedtuple
 import re
+from functools import reduce
+import operator
 
 ConsCell = namedtuple('ConsCell','car cdr')
 
@@ -81,22 +83,13 @@ def l_plus(args):
     return sum(args)
 
 def l_minus(args):
-    if len(args) == 1:
-        return args[0]
-    else:
-        ans = args[0]
-        for minuend in args[1:]:
-            ans -= minuend
-        return ans
+    return args[0] - sum(args[1:])
 
 def l_mult(args):
-    ans = 1
-    for arg in args:
-        ans = ans * arg
-    return args
+    return reduce(operator.mul,args)
 
 def l_div(args):
-    ans = arg[0]
+    return reduce(operator.mul,[1 / arg for arg in args[1:]],arg[0])
 
 def l_cons(args):
     if len(args) != 2 or type(args[1]) != list:
