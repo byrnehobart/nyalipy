@@ -92,10 +92,13 @@ def l_div(args):
     return reduce(operator.mul,[1 / arg for arg in args[1:]],arg[0])
 
 def l_cons(args):
-    if len(args) != 2 or type(args[1]) != list:
+    if len(args) != 2:
         print('error')
     else:
-        return [args[0]]+args[1]
+        if type(args[1]) is list:
+            return [args[0]]+args[1]
+        else:
+            return ConsCell(args[0],args[1])
 
 def l_car(args):
     if type(args) != list:
@@ -118,7 +121,6 @@ funclist = {'+':l_plus,
             'cons':l_cons,
             'car':l_car,
             'cdr':l_cdr}
-
 
 
 # Take a list of elements. One at a time, append to the output list.
