@@ -1,44 +1,57 @@
 # Byrne Hobart
 # [2016-03-27 Sun]
 
-def read_lisp(elts):
-    """parses tokens one at a time, stores in nested lists"""
-    if len(elts) == 1: # atom evaluates to itself
-        elt = elts[0]
-        try:
-            elt = int(elt)
-        except:
-            pass
-        return elt
+from collections import namedtuple
+import re
+
+ConsCell = namedtuple('ConsCell','car cdr')
+
+def tokenize_str(string):
+    """Take a string, return a list of tokens"""
+    return [x for x in re.split(' |(\()|(\))',string) if x != None and x != '']
+
+def list_to_conses(lst):
+    """Convert a list to a collection of conses
+
+    I may not need to use this"""
+    if lst == []:
+        return '()'
+    return ConsCell(lst[0],list_to_conses(list[1:]))
+
+def grab_sublist(token_list):
+    """Extract a sub-list from a list
+    
+    Returns 1) the extraced sublist, and 2) the remainder of the original list"""
+    parencount = 1
+    sublist = []
+    while token_list != []:
+        elt = token_list.pop(0)
+        if elt == '(':
+            subsublist,token_list = grab_sublist(token_list)
+            sublist.append(subsublist)
+        elif elt == ')':
+            parencount -= 1
+            if parencount == 0:
+                print("Parencount-induced exit")
+                print(sublist[0],token_list)
+                return sublist,token_list # don't return the closing paren of the sublist
+        else:
+            try:
+                elt = int(elt)
+            except:
+                pass
+            sublist.append(elt)
+    print(sublist[0],token_list)
+    return sublist[0], token_list
+    print("Somehow token list got returned, not parsed")
+    
+def atomp(elt):
+    """Check a string to see if it's an atom"""
+    if elt not in ['(',')']:
+        return True
     else:
-        output = []
-        while True:
-            if elts == []:
-                return output
-            else:
-                elt = elts.pop(0)
-                try:
-                    elt = int(elt)
-                except:
-                    pass
-                if elt == ')':
-                    return output
-                elif elt == '(':
-                    output.append(read_lisp(elts))
-                else:
-                    output.append(elt)
-
-def parse_string(arg):
-    """Takes a string as input, turns into a list of tokens, sends to token-parser"""
-    elts =  [item for sublist in [split_parens(x) for x in arg.split()] for item in sublist]
-    return read_lisp(elts)[0] # so ugly. Why does it add an extra list?
-        
-def split_parens(string):
-    """For any string beginning/ending w/a paren, returns string and paren separately"""
-    string = [s+'(' for s in string.split('(')]
-    string = [s+')' for s in [x.split(')') for x in string]]
-    return string
-
+        False
+            
 test_string = '(+ 1 2 (- 3 4))'
 
 test_2 = '(cons a (car (cdr (b c d))))'
@@ -46,6 +59,17 @@ test_2 = '(cons a (car (cdr (b c d))))'
 test_parsed_string = ['+',1,2,['-',3,4]]
 
 # Lisp Functions, operating on lists
+
+def l_eval(lst):
+    func = l[0]
+    args = l[1:]
+    for x in args:
+        if not atomp(x):
+            x = l_eval(x)
+    return l_apply(func,args)
+
+def l_lambda(vars,func):
+    return func(vars)
 
 def l_apply(func, args):
     try:
@@ -75,7 +99,7 @@ def l_div(args):
     ans = arg[0]
 
 def l_cons(args):
-    if len>args != 2 or type(args[1]) != list:
+    if len(args) != 2 or type(args[1]) != list:
         print('error')
     else:
         return [args[0]]+args[1]
